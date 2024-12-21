@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TruckersMP Player Info</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: transparent;
+            color: white;
+            text-align: center;
+        }
+        .container {
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .avatar {
+            border-radius: 50%;
+            width: 100px;
+            height: 100px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img id="avatar" class="avatar" src="" alt="Avatar">
+        <h2 id="username">Loading...</h2>
+        <p id="status">Loading...</p>
+        <p id="location">Loading...</p>
+        <p id="speed">Loading...</p>
+        <p id="job">Loading...</p>
+        <p id="server">Loading...</p>
+        <p id="joinDate">Loading...</p>
+        <p id="patreon">Loading...</p>
+    </div>
+
+    <script>
+        const playerId = '5719906'; // Replace with your TruckersMP ID
+        const proxyUrl = `https://truckersmp-cors-proxy.vercel.app/api/proxy?url=https://api.truckersmp.com/v2/player/id/${playerId}`;
+
+        fetch(proxyUrl)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.error) {
+                    document.getElementById('username').innerText = 'Error fetching data';
+                    document.getElementById('status').innerText = '';
+                    document.getElementById('location').innerText = '';
+                    document.getElementById('speed').innerText = '';
+                    document.getElementById('job').innerText = '';
+                    document.getElementById('server').innerText = '';
+                    document.getElementById('joinDate').innerText = '';
+                    document.getElementById('patreon').innerText = '';
+                    return;
+                }
+
+                const player = data.data.attributes;
+
+                document.getElementById('avatar').src = player.avatar;
+                document.getElementById('username').innerText = player.username;
+                document.getElementById('status').innerText = `Status: ${player.status}`;
+                document.getElementById('location').innerText = `Location: ${player.location || 'N/A'}`;
+                document.getElementById('speed').innerText = `Speed: ${player.speed || 'N/A'}`;
+                document.getElementById('job').innerText = `Job: ${player.job || 'N/A'}`;
+                document.getElementById('server').innerText = `Server: ${player.server || 'N/A'}`;
+                document.getElementById('joinDate').innerText = `Joined: ${new Date(player.joinDate).toLocaleDateString()}`;
+                document.getElementById('patreon').innerText = `Patreon: ${player.patreon.isPatron ? 'Yes' : 'No'}`;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('username').innerText = 'Error fetching data';
+            });
+    </script>
+</body>
+</html>
