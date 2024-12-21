@@ -15,6 +15,16 @@ app.get('/proxy', async (req, res) => {
         return res.status(400).json({ error: 'Missing url query parameter' });
     }
 
+    // Validate the target URL
+    try {
+        const url = new URL(targetUrl);
+        if (url.hostname !== 'api.truckersmp.com') {
+            return res.status(403).json({ error: 'Forbidden' });
+        }
+    } catch (e) {
+        return res.status(400).json({ error: 'Invalid URL' });
+    }
+
     try {
         const response = await fetch(targetUrl);
         if (!response.ok) {
