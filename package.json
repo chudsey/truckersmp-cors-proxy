@@ -1,0 +1,12 @@
+{
+  "name": "truckersmp-cors-proxy",
+  "version": "1.0.0",
+  "description": "CORS proxy for TruckersMP API",
+  "main": "api/proxy.js",
+  "scripts": {
+    "start": "node api/proxy.js"
+  },
+  "dependencies": {
+    "node-fetch": "^2.6.1"
+  }
+}
